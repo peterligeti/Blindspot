@@ -53,7 +53,7 @@ public class VectorMove : MonoBehaviour
     private float fleeTimer;
     private float fleeCooldownTimer = 0f;
     private Vector3? fleeTarget = null;
-
+    
     [Header("Shooting Settings")]
     [SerializeField] private Shooter shooter; // 🔹 generic shooter
     private float lastShotTime = -Mathf.Infinity;
@@ -193,13 +193,16 @@ public class VectorMove : MonoBehaviour
     {
         if (!useVisionCheck) return true;
 
+        float effectiveRange = Mathf.Min(viewDistance, playerDetectionRange);
+        Vector3 forward = -transform.up;
+
         float step = viewAngle / (numRays - 1);
         for (int i = 0; i < numRays; i++)
         {
             float angle = -viewAngle / 2 + step * i;
-            Vector3 rayDir = Quaternion.Euler(0, 0, angle) * transform.right;
+            Vector3 rayDir = Quaternion.Euler(0, 0, angle) * forward;
 
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDir, viewDistance, visionMask);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, rayDir, effectiveRange, visionMask);
 
             if (hit.collider != null && hit.collider.gameObject != gameObject)
             {
@@ -215,7 +218,7 @@ public class VectorMove : MonoBehaviour
             }
             else
             {
-                Debug.DrawLine(transform.position, transform.position + rayDir * viewDistance, Color.yellow);
+                Debug.DrawLine(transform.position, transform.position + rayDir * effectiveRange, Color.yellow);
             }
         }
         return false;
@@ -344,6 +347,31 @@ public class VectorMove : MonoBehaviour
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, fleeRadius);
+        }
+
+        if (useVisionCheck)
+        {
+            Gizmos.color = new Color(1f, 0.5f, 0f, 0.4f);
+            float effectiveRange = Mathf.Min(viewDistance, playerDetectionRange);
+            Vector3 forward = -transform.up;
+
+            Quaternion leftRot = Quaternion.Euler(0, 0, -viewAngle / 2);
+            Quaternion rightRot = Quaternion.Euler(0, 0, viewAngle / 2);
+
+            Vector3 leftDir = leftRot * forward * effectiveRange;
+            Vector3 rightDir = rightRot * forward * effectiveRange;
+
+            Gizmos.DrawLine(transform.position, transform.position + forward * effectiveRange);
+            Gizmos.DrawLine(transform.position, transform.position + leftDir);
+            Gizmos.DrawLine(transform.position, transform.position + rightDir);
+
+            float step = viewAngle / (numRays - 1);
+            for (int i = 0; i < numRays; i++)
+            {
+                float angle = -viewAngle / 2 + step * i;
+                Vector3 dir = Quaternion.Euler(0, 0, angle) * forward * effectiveRange;
+                Gizmos.DrawLine(transform.position, transform.position + dir);
+            }
         }
     }
 }
