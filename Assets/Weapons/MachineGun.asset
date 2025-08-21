@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: MachineGun
   bulletPrefab: {fileID: 7947026095279629980, guid: e26a97fcf5634fb458790666f09b1424, type: 3}
-  bulletSpeed: 10
+  bulletSpeed: 8
   fireRate: 10
   damage: 1
-  spread: 3
+  spread: 5
   bulletsPerShot: 1
   spreadMode: 0
   shootSfx: {fileID: 8300000, guid: 64c8dec508c82244daa4c7648c6d78ce, type: 3}

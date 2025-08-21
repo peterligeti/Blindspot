@@ -15,12 +15,9 @@ MonoBehaviour:
   weaponName: Pistol
   bulletPrefab: {fileID: 7947026095279629980, guid: e26a97fcf5634fb458790666f09b1424, type: 3}
   bulletSpeed: 10
-  fireRate: 1
+  fireRate: 1.5
   damage: 1
-  spread: 1
+  spread: 2
   bulletsPerShot: 1
   spreadMode: 0
-  isExplosive: 0
-  explosionBulletCount: 0
-  explosionSpread: 360
   shootSfx: {fileID: 8300000, guid: 44663c68ffdd1064cbab1b21f119942c, type: 3}

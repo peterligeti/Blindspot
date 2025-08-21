@@ -64,8 +64,15 @@ public class LevelGeneratorLogic : MonoBehaviour
     private List<Leaf> leaves = new List<Leaf>();
     private List<Rect> createdRooms = new List<Rect>();
     
+    [System.Serializable]
+    public struct EnemyWeightSet
+    {
+        public float[] weights; // must match enemyPrefabs length
+    }
+    
     [Header("Enemy AI Agent Settings")]
-    [SerializeField] GameObject enemyPrefab;
+    [SerializeField] GameObject[] enemyPrefabs;
+    [SerializeField] private EnemyWeightSet[] levelEnemyWeights;
     private List<Vector3> enemySpawnPositions = new List<Vector3>();
     [SerializeField] int currentNumberOfEnemies = 1;
     [SerializeField] int defaultEnemiesPerRoom = 1;
@@ -663,30 +670,58 @@ public class LevelGeneratorLogic : MonoBehaviour
         return Vector3.zero;
     }
     
+    private GameObject GetWeightedEnemyPrefab()
+    {
+        int levelIndex = Mathf.Clamp(currentLevel - 1, 0, levelEnemyWeights.Length - 1);
+        float[] weights = levelEnemyWeights[levelIndex].weights;
+
+        float totalWeight = 0f;
+        for (int i = 0; i < weights.Length; i++)
+            totalWeight += weights[i];
+
+        float roll = Random.Range(0, totalWeight);
+        float cumulative = 0f;
+
+        for (int i = 0; i < weights.Length; i++)
+        {
+            cumulative += weights[i];
+            if (roll <= cumulative)
+                return enemyPrefabs[i];
+        }
+
+        return enemyPrefabs[0]; // fallback
+    }
+    
     public void SpawnEnemiesInRooms()
     {
-        if (!enemyPrefab || !spawnedEnemiesContainer)
+        if (enemyPrefabs == null || enemyPrefabs.Length == 0 || !spawnedEnemiesContainer)
         {
-            Debug.LogError("Missing enemy prefab or container.");
+            Debug.LogError("Missing enemy prefabs or container.");
             return;
         }
 
+        int unlockedTypes = Mathf.Min(currentLevel, enemyPrefabs.Length);
+
         foreach (Vector3 pos in enemySpawnPositions)
         {
-            GameObject enemyInstance = Instantiate(enemyPrefab, pos, Quaternion.identity, spawnedEnemiesContainer);
+            GameObject prefabToSpawn = GetWeightedEnemyPrefab();
+
+            GameObject enemyInstance = Instantiate(prefabToSpawn, pos, Quaternion.identity, spawnedEnemiesContainer);
             currentNumberOfEnemies++;
 
-            // Assign patrol tilemap and allowed tiles
             VectorMove vm = enemyInstance.GetComponent<VectorMove>();
             if (vm != null)
             {
                 vm.SetPatrolTilemap(groundTilemap, allowedPatrolTiles);
-                vm.SetPathfindingTilemap(groundTilemap, allowedPathfindingTiles); // Same as patrol tiles for now, not sure if it will ever change
+                vm.SetPathfindingTilemap(groundTilemap, allowedPathfindingTiles);
             }
         }
 
+
         currentNumberOfEnemiesText.text = $"Enemy count: {currentNumberOfEnemies}";
     }
+
+
 
     public void ClearLevel()
     {
@@ -748,7 +783,7 @@ public class LevelGeneratorLogic : MonoBehaviour
         }
     }
     
-    public void IncreaseLevelDifficulty() //called if player kills all enemies on current level 
+    public void IncreaseLevelDifficulty() // called if player kills all enemies on current level 
     {
         if (currentLevel < maxLevel)
         {

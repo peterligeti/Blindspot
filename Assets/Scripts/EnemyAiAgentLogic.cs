@@ -51,7 +51,7 @@ public class VectorMove : MonoBehaviour
     [SerializeField] float fleeChance = 0.5f;
     [SerializeField] float fleeCooldownTime = 5f;
     private float fleeTimer;
-    private float fleeCooldownTimer = 0f;
+    private float fleeCooldownTimer = 10f;
     private Vector3? fleeTarget = null;
     
     [Header("Shooting Settings")]
