@@ -39,6 +39,7 @@ public class VectorMove : MonoBehaviour
     [SerializeField] float patrolSpeed = 1.0f;
     [SerializeField] private float patrolRadius = 2f;
     [SerializeField] private float patrolPointTolerance = 0.5f;
+    [SerializeField] private float chanceToGoIdleWhenPatrolEnds = 0.5f;
     [SerializeField] private Tilemap patrolTilemap;
     [SerializeField] private TileBase[] allowedPatrolTiles;
     private Vector3? patrolTarget = null;
@@ -234,6 +235,15 @@ public class VectorMove : MonoBehaviour
 
     Vector3 FindPatrolTarget()
     {
+        if (patrolTarget != null && Vector3.Distance(transform.position, patrolTarget.Value) < patrolPointTolerance)
+        {
+            if (Random.value < chanceToGoIdleWhenPatrolEnds) // Random chance to go IDLE after each patrol segment
+            {
+                currentState = STATE.IDLE;
+                idleTimer = Random.Range(idleMinTime, idleMaxTime);
+            }
+        }
+        
         if (patrolTarget == null || Vector3.Distance(transform.position, patrolTarget.Value) < patrolPointTolerance)
         {
             for (int attempts = 0; attempts < 10; attempts++)

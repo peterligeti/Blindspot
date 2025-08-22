@@ -180,6 +180,7 @@ MonoBehaviour:
   patrolSpeed: 1
   patrolRadius: 5
   patrolPointTolerance: 0.7
+  chanceToGoIdleWhenPatrolEnds: 1
   patrolTilemap: {fileID: 0}
   allowedPatrolTiles: []
   fleeSpeed: 3
