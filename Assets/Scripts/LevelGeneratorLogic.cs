@@ -248,8 +248,6 @@ public class LevelGeneratorLogic : MonoBehaviour
         }
     }
 
-
-
     IEnumerator GenerateDungeonStepByStep()
     {
         Leaf root = new Leaf(0, 0, levelWidth, levelHeight);

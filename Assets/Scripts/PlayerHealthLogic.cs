@@ -4,33 +4,43 @@ using TMPro;
 
 public class PlayerHealthLogic : MonoBehaviour
 {
-    [SerializeField] int maxHealth = 3;
+    [SerializeField] private int startingMaxHealth = 3;
+    private static int persistentMaxHealth = -1; // keeps value across respawns
+
     private int currentHealth;
     
     public static event Action OnPlayerDeath;
 
     private TextMeshProUGUI playerHealthText;
-    
+    private TextMeshProUGUI playerMaxHealthText;
+
     private SpriteRenderer spriteRenderer;
-    [SerializeField] float flashDuration = 0.1f;
+    [SerializeField] private float flashDuration = 0.1f;
     private Color originalColor;
 
     void Start()
     {
-        currentHealth = maxHealth;
-        
+        if (persistentMaxHealth == -1)
+            persistentMaxHealth = startingMaxHealth;
+
+        currentHealth = persistentMaxHealth;
+
         spriteRenderer = GetComponent<SpriteRenderer>();
         originalColor = spriteRenderer.color;
         
+        // Setup UI
         GameObject textObject = GameObject.Find("PlayerHealthPoint");
         if (textObject != null)
         {
             playerHealthText = textObject.GetComponent<TextMeshProUGUI>();
             playerHealthText.text = $"Health {currentHealth}";
         }
-        else
+        
+        GameObject textMaxObject = GameObject.Find("PlayerMaxHealthPoint");
+        if (textMaxObject != null)
         {
-            Debug.LogWarning("PlayerHealthPoint not found in scene!");
+            playerMaxHealthText = textMaxObject.GetComponent<TextMeshProUGUI>();
+            playerMaxHealthText.text = $"Max Health {persistentMaxHealth}";
         }
     }
 
@@ -39,8 +49,6 @@ public class PlayerHealthLogic : MonoBehaviour
         FlashWhenHurt();
         
         currentHealth -= damage;
-        Debug.Log($"Player took {damage} damage. Current Health: {currentHealth}");
-
         if (playerHealthText != null)
             playerHealthText.text = $"Health {currentHealth}";
 
@@ -51,19 +59,23 @@ public class PlayerHealthLogic : MonoBehaviour
     public void AddHealthPoints(int amount)
     {
         currentHealth += amount;
-        
         if (playerHealthText != null)
             playerHealthText.text = $"Health {currentHealth}";
+
+        if (currentHealth > persistentMaxHealth)
+        {
+            persistentMaxHealth += amount;
+            if (playerMaxHealthText != null)
+                playerMaxHealthText.text = $"Max Health {persistentMaxHealth}";
+            Debug.Log("Max Health Increased to: " + persistentMaxHealth);
+        }
     }
-    
-    private void FlashWhenHurt()
-    {
-        StartCoroutine(Flash());
-    }
-  
+
+    private void FlashWhenHurt() => StartCoroutine(Flash());
+
     private System.Collections.IEnumerator Flash()
     {
-        spriteRenderer.color = new Color(1f, 0.2f, 0.2f); // bright red
+        spriteRenderer.color = new Color(1f, 0.2f, 0.2f);
         yield return new WaitForSeconds(flashDuration);
         spriteRenderer.color = originalColor;
     }
@@ -71,15 +83,16 @@ public class PlayerHealthLogic : MonoBehaviour
     private void Die()
     {
         OnPlayerDeath?.Invoke();
-        currentHealth = maxHealth;
+        currentHealth = persistentMaxHealth;
         StartCoroutine(DieAfterFlash());
-        playerHealthText.text = $"Health {currentHealth}";
+        if (playerHealthText != null)
+            playerHealthText.text = $"Health {currentHealth}";
     }
-    
+
     private System.Collections.IEnumerator DieAfterFlash()
     {
         spriteRenderer.color = new Color(1f, 0.2f, 0.2f);
-        yield return new WaitForSeconds(flashDuration);  // Wait for flash to be visible
+        yield return new WaitForSeconds(flashDuration);
         Destroy(gameObject);
     }
 }

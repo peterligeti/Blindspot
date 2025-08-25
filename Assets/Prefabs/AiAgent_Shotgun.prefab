@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canSpawnHealthPack: 1
-  healthPackChance: 0.3
+  healthPackChance: 0.2
   healthPackPrefab: {fileID: 3024585652038224720, guid: 9367c045d334a8b488cad874bb250aba, type: 3}
   spawnedLootContainer: {fileID: 0}
 --- !u!114 &3464371992612158373
