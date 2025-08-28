@@ -179,6 +179,7 @@ MonoBehaviour:
     m_Bits: 520
   patrolSpeed: 1
   patrolRadius: 5
+  maxTileDistance: 3
   patrolPointTolerance: 0.7
   chanceToGoIdleWhenPatrolEnds: 0.5
   patrolTilemap: {fileID: 0}
@@ -237,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38bcf83d0152733408f2f65e0ff9fb59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  maxHealth: 2
   flashDuration: 0.1
 --- !u!82 &-5703755278137124401
 AudioSource:
@@ -348,8 +349,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canSpawnHealthPack: 1
-  healthPackChance: 0.3
+  healthPackChance: 0.5
   healthPackPrefab: {fileID: 3024585652038224720, guid: 9367c045d334a8b488cad874bb250aba, type: 3}
+  canSpawnWeaponPack: 0
+  weaponDropChance: 1
+  weaponPrefab: {fileID: 3024585652038224720, guid: 381dcebe000ca2a4f983bf88870dc2bd, type: 3}
   spawnedLootContainer: {fileID: 0}
 --- !u!114 &3464371992612158373
 MonoBehaviour:

@@ -13,7 +13,7 @@ public class PlayerShooter : MonoBehaviour
             shooter.Shoot(firePoint.right);
         }
 
-        // Support your custom analog trigger button
+        // Support your custom analog trigger button but cam rotation does not seem to work
         if (InputUtility.RTriggerPulled)
         {
             shooter.Shoot(firePoint.right);

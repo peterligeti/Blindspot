@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: MachineGun
   m_EditorClassIdentifier: 
   weaponName: MachineGun
-  bulletPrefab: {fileID: 7947026095279629980, guid: e26a97fcf5634fb458790666f09b1424, type: 3}
+  bulletPrefab: {fileID: 7947026095279629980, guid: 19acadedd138cc944b8795dbd2c2fa67, type: 3}
   bulletSpeed: 8
-  fireRate: 10
+  fireRate: 8
   damage: 1
   spread: 5
   bulletsPerShot: 1

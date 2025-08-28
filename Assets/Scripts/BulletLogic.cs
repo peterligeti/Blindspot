@@ -6,6 +6,7 @@ public class BulletLogic : MonoBehaviour
     [SerializeField] float lifetime = 1f;
     public string shooterTag; // "Player" or "Enemy"
     public int damage; // <-- now set from the weapon
+    public bool destroyWhenHitSomeone = true;
 
     void Start()
     {
@@ -20,14 +21,16 @@ public class BulletLogic : MonoBehaviour
         {
             EnemyHealthLogic enemyHealth = other.GetComponent<EnemyHealthLogic>();
             if (enemyHealth != null) enemyHealth.TakeDamage(damage);
-            Destroy(gameObject);
+            
+            if (destroyWhenHitSomeone) Destroy(gameObject);
         }
 
         if (shooterTag == "Enemy" && other.CompareTag("Player"))
         {
             PlayerHealthLogic playerHealth = other.GetComponent<PlayerHealthLogic>();
             if (playerHealth != null) playerHealth.TakeDamage(damage);
-            Destroy(gameObject);
+            
+            if (destroyWhenHitSomeone) Destroy(gameObject);
         }
     }
 }

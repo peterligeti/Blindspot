@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7229402489be1c443a0eb4f536b238fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 3
+  startingMaxHealth: 3
   flashDuration: 0.2
 --- !u!82 &-6683615028865473006
 AudioSource:

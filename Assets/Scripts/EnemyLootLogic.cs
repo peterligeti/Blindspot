@@ -9,6 +9,10 @@ public class EnemyLootLogic : MonoBehaviour
     [SerializeField] private float healthPackChance = 0.5f;
     [SerializeField] GameObject healthPackPrefab;
     
+    [SerializeField] private bool canSpawnWeaponPack = true;
+    [SerializeField] private float weaponDropChance = 0.5f;
+    [SerializeField] GameObject weaponPrefab;
+    
     [SerializeField] Transform spawnedLootContainer;
     
     void Start()
@@ -49,6 +53,12 @@ public class EnemyLootLogic : MonoBehaviour
         {
             Instantiate(healthPackPrefab, transform.position, Quaternion.identity, spawnedLootContainer);
             Debug.Log("Health pack spawned!");
+        }
+        
+        if (canSpawnWeaponPack && Random.value < weaponDropChance)
+        {
+            Instantiate(weaponPrefab, transform.position, Quaternion.identity, spawnedLootContainer);
+            Debug.Log("Weapon spawned!");
         }
     }
 

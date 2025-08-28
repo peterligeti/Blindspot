@@ -1,4 +1,5 @@
 using System;
+using System.Data.SqlTypes;
 using UnityEngine;
 using TMPro;
 
@@ -13,11 +14,14 @@ public class PlayerHealthLogic : MonoBehaviour
 
     private TextMeshProUGUI playerHealthText;
     private TextMeshProUGUI playerMaxHealthText;
-
+    private bool invulnerable = false;
+    private TMP_Text invulnerableText;
+    
     private SpriteRenderer spriteRenderer;
     [SerializeField] private float flashDuration = 0.1f;
     private Color originalColor;
-
+    
+    
     void Start()
     {
         if (persistentMaxHealth == -1)
@@ -42,10 +46,17 @@ public class PlayerHealthLogic : MonoBehaviour
             playerMaxHealthText = textMaxObject.GetComponent<TextMeshProUGUI>();
             playerMaxHealthText.text = $"Max Health {persistentMaxHealth}";
         }
+        
+        invulnerableText = GameObject.Find("invulnerabilityText").GetComponent<TMP_Text>();
     }
 
     public void TakeDamage(int damage)
     {
+        if (invulnerable)
+        {
+            return; // Invulnerability cheat for testing only
+        }
+        
         FlashWhenHurt();
         
         currentHealth -= damage;
@@ -94,5 +105,14 @@ public class PlayerHealthLogic : MonoBehaviour
         spriteRenderer.color = new Color(1f, 0.2f, 0.2f);
         yield return new WaitForSeconds(flashDuration);
         Destroy(gameObject);
+    }
+    
+    void Update() 
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            invulnerable = !invulnerable;
+            invulnerableText.color = invulnerable ? Color.green : Color.white;
+        }
     }
 }

@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0}
-  lifetime: 0.4
+  lifetime: 0.6
   shooterTag: 
   damage: 1
 --- !u!1 &3455684470402039622

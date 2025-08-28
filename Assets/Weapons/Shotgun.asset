@@ -17,7 +17,7 @@ MonoBehaviour:
   bulletSpeed: 10
   fireRate: 1
   damage: 1
-  spread: 30
-  bulletsPerShot: 5
+  spread: 45
+  bulletsPerShot: 10
   spreadMode: 1
-  shootSfx: {fileID: 0}
+  shootSfx: {fileID: 8300000, guid: 43796d6d7592ae0459e84cd8513edcda, type: 3}

@@ -21,15 +21,16 @@ public class EnemyHealthLogic : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (currentHealth == 0)
+        {
+            currentHealth = -1; // To never trigger death more than once while DieAfterFlash() and getting hit again
+            Die();
+        }
+        
         FlashWhenHurt();
         
         currentHealth -= damage;
         Debug.Log($"Enemy took {damage} damage. Current Health: {currentHealth}");
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
     }
     
     public int GetCurrentHealth() // Ai logic uses this to decide if it should do low health flee 
